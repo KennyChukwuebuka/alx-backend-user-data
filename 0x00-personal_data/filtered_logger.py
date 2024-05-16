@@ -23,13 +23,11 @@ def get_logger() -> logging.Logger:
 
 def main() -> None:
     """Main function"""
-    fields = ["password", "date_of_birth"]
-    redaction = "XXX"
-    message = "name=egg;email=eggmin@eggsample.com;password=eggcellent;date_of_birth=12/12/1986;"
-    separator = ";"
-    print(
-        filter_datum(fields, redaction, message, separator)
-    )
+    logger = get_logger()
+    logger.setLevel(logging.INFO)
+    logger.addHandler(logging.StreamHandler())
+    logger.info(filter_datum(['name', 'email', 'phone'],
+                             'XXX', 'Bob loblaw', ';'))
 
 
 if __name__ == "__main__":
