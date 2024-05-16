@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 """
-Write a function called filter_datum that returns the log message obfuscated
-    Args:
-        fields:
-        redaction:
-        message:
-        separator:
-
+    Filtered Logger
 """
 
 import re
+import logging
 
 
-import re
+def filter_datum(fields: list, redaction: str, message:
+                 str, separator: str) -> str:
+    """Returns the log message obfuscated"""
+    for field in fields:
+        message = re.sub(rf'{field}=.*?{separator}',
+                         f'{field}={redaction}{separator}', message)
+    return message
 
-def filter_datum(fields: list, redaction: str, message: str, separator: str) -> str:
-    return re.sub(rf'({"|".join(fields)})=.*?{separator}', rf'\1={redaction}{separator}', message)
+
+if __name__ == '__main__':
+    log = logging.getLogger('test_logger')
+    log.setLevel(logging.INFO)
+    log.info('Test log')
