@@ -16,7 +16,21 @@ def filter_datum(fields: list, redaction: str, message:
     return message
 
 
-if __name__ == '__main__':
-    log = logging.getLogger('test_logger')
-    log.setLevel(logging.INFO)
-    log.info('Test log')
+def get_logger() -> logging.Logger:
+    """Returns a logger object"""
+    return logging.getLogger('user_data')
+
+
+def main() -> None:
+    """Main function"""
+    fields = ["password", "date_of_birth"]
+    redaction = "XXX"
+    message = "name=egg;email=eggmin@eggsample.com;password=eggcellent;date_of_birth=12/12/1986;"
+    separator = ";"
+    print(
+        filter_datum(fields, redaction, message, separator)
+    )
+
+
+if __name__ == "__main__":
+    main()
