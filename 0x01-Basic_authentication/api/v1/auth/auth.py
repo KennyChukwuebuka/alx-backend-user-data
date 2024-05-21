@@ -6,15 +6,16 @@
 from typing import List, TypeVar
 from flask import request
 
+
 class Auth:
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
         Determines if authentication is required for a given path.
         :param path: The path to check.
-        :param excluded_paths: A list of paths that do not require authentication.
+        :param excluded_paths: A list of paths
         :return: False for now. Logic to be implemented later.
         """
-        return False
+        return False if path in excluded_paths else True
 
     def authorization_header(self, request=None) -> str:
         """
