@@ -45,6 +45,7 @@ def forbidden_error(error) -> str:
 
 
 @app.before_request
+@app.before_request
 def before_request() -> str:
     """ Before Request Handler
     Requests Validation
@@ -62,7 +63,8 @@ def before_request() -> str:
     if auth.authorization_header(request) is None:
         abort(401)
 
-    if auth.current_user(request) is None:
+    request.current_user = auth.current_user(request)
+    if request.current_user is None:
         abort(403)
 
 
