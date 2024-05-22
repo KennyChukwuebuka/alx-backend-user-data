@@ -21,6 +21,9 @@ if AUTH_TYPE == "auth":
 elif AUTH_TYPE == "basic_auth":
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
+elif AUTH_TYPE == "session_auth":
+    from api.v1.auth.session_auth import SessionAuth
+    auth = SessionAuth()
 
 
 @app.errorhandler(404)
@@ -60,7 +63,8 @@ def before_request() -> str:
     if not auth.require_auth(request.path, excluded_paths):
         return
 
-    if auth.authorization_header(request) is None:
+    if (auth.authorization_header(request) is None and
+            AUTH_TYPE == 'session_auth'):
         abort(401)
 
     request.current_user = auth.current_user(request)
