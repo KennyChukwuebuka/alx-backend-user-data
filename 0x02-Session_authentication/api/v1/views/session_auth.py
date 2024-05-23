@@ -1,4 +1,4 @@
-#!/usr/bin/env pyhon3
+#!/usr/bin/env python3
 """
 Module of Session Authentication
 the file api/v1/views/session_auth.py, create a route POST
