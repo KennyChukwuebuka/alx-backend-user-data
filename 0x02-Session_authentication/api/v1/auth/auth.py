@@ -48,7 +48,7 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         """ Validates current user """
         return None
-
+    
     def session_cookie(self, request=None) -> str:
         """ Validates session cookie
         """
