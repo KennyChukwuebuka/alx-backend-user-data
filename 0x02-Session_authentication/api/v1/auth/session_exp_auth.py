@@ -7,6 +7,7 @@ from api.v1.auth.session_auth import SessionAuth
 
 
 class SessionExpAuth(SessionAuth):
+    """Session expiration class."""
     def __init__(self):
         """Initialize the SessionExpAuth class."""
         super().__init__()
