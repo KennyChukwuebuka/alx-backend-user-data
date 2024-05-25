@@ -7,12 +7,18 @@ import uuid
 
 
 class UserSession:
+    """ User session class
+    """
     def __init__(self, user_id=None, session_id=None):
+        """Initialize the UserSession class
+        """
         self.user_id = user_id
         self.session_id = session_id if session_id else str(uuid.uuid4())
         self.created_at = datetime.now()
 
     def save(self):
+        """ Save the UserSession instance to the database
+        """
         # Logic to save the UserSession instance to the database
         pass
 
