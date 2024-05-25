@@ -47,8 +47,9 @@ class SessionExpAuth(SessionAuth):
             return None
 
         current_time = datetime.now()
-        session_expiry_time = created_at
-        + timedelta(seconds=self.session_duration)
+        session_expiry_time = created_at + timedelta(
+            seconds=self.session_duration
+        )
 
         if current_time > session_expiry_time:
             return None
