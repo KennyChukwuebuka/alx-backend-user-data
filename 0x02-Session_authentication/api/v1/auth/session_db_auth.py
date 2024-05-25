@@ -6,7 +6,10 @@ from models.user_session import UserSession
 
 
 class SessionDBAuth(SessionExpAuth):
+    """ Session in Database class
+    """
     def create_session(self, user_id=None):
+        """ Create a session in the database"""
         # Create a new UserSession instance and store it in the database
         session = UserSession(user_id=user_id)
         session.save()
@@ -14,6 +17,7 @@ class SessionDBAuth(SessionExpAuth):
         return session.session_id
 
     def user_id_for_session_id(self, session_id=None):
+        """Retrieve the user ID associated with the session ID"""
         # Retrieve the UserSession from the database based on the session ID
         session = UserSession.get_session_by_id(session_id)
         if session:
@@ -22,6 +26,7 @@ class SessionDBAuth(SessionExpAuth):
             return None
 
     def destroy_session(self, request=None):
+        """Delete the user session / logout"""
         # Get the session ID from the request cookie
         session_id = request.cookies.get('session_id')
         # Delete the UserSession from the database based on the session ID
