@@ -2,18 +2,26 @@
 """ User session module
 """
 
-from sqlalchemy import Column, String
-from .base import Base
+from datetime import datetime
+import uuid
 
 
-class UserSession(Base):
-    __tablename__ = 'user_session'
-
-    user_id = Column(String, primary_key=True)
-    session_id = Column(String)
-
-    def __init__(self, user_id: str, session_id: str,
-                 *args: list, **kwargs: dict):
-        super().__init__(*args, **kwargs)
+class UserSession:
+    def __init__(self, user_id=None, session_id=None):
         self.user_id = user_id
-        self.session_id = session_id
+        self.session_id = session_id if session_id else str(uuid.uuid4())
+        self.created_at = datetime.now()
+
+    def save(self):
+        # Logic to save the UserSession instance to the database
+        pass
+
+    @classmethod
+    def get_session_by_id(cls, session_id):
+        # Logic to retrieve UserSession
+        pass
+
+    @classmethod
+    def delete_session(cls, session_id):
+        # Logic to delete UserSession
+        pass
