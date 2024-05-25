@@ -1,78 +1,56 @@
 #!/usr/bin/env python3
 """ Module of Session in Database
 """
-from api.v1.auth.session_exp_auth import SessionExpAuth
+import os
 from datetime import datetime, timedelta
-from models.user_session import UserSession
+from api.v1.auth.session_auth import SessionAuth
 
 
-class SessionDBAuth(SessionExpAuth):
-    """Session in database Class"""
+class SessionExpAuth(SessionAuth):
+    def __init__(self):
+        """Initialize the SessionExpAuth class."""
+        super().__init__()
+        try:
+            self.session_duration = int(os.getenv('SESSION_DURATION', 0))
+        except ValueError:
+            self.session_duration = 0
 
     def create_session(self, user_id=None):
-        """Creation session database"""
+        """Create a session with an expiration."""
         session_id = super().create_session(user_id)
-
         if session_id is None:
             return None
 
-        kwargs = {'user_id': user_id, 'session_id': session_id}
-        user_session = UserSession(**kwargs)
-        user_session.save()
-        UserSession.save_to_file()
-
+        session_dictionary = {
+            'user_id': user_id,
+            'created_at': datetime.now()
+        }
+        self.user_id_by_session_id[session_id] = session_dictionary
         return session_id
 
     def user_id_for_session_id(self, session_id=None):
-        """User ID for Session ID Database"""
-        if session_id is None:
+        """Retrieve the user_id associated
+        with the session_id if not expired.
+        """
+        if session_id is None or session_id not in self.user_id_by_session_id:
             return None
 
-        UserSession.load_from_file()
-        user_session = UserSession.search({
-            'session_id': session_id
-        })
-
-        if not user_session:
+        session_dict = self.user_id_by_session_id.get(session_id)
+        if not session_dict:
             return None
 
-        user_session = user_session[0]
+        if self.session_duration <= 0:
+            return session_dict.get('user_id')
 
-        expired_time = user_session.created_at + \
-            timedelta(seconds=self.session_duration)
-
-        if expired_time < datetime.utcnow():
+        created_at = session_dict.get('created_at')
+        if created_at is None:
             return None
 
-        return user_session.user_id
+        current_time = datetime.now()
+        session_expiry_time = created_at
+        + timedelta(seconds=self.session_duration)
 
-    def destroy_session(self, request=None):
-        """Remove Session from Database"""
-        if request is None:
-            return False
+        if current_time > session_expiry_time:
+            return None
 
-        session_id = self.session_cookie(request)
-        if session_id is None:
-            return False
-
-        user_id = self.user_id_for_session_id(session_id)
-
-        if not user_id:
-            return False
-
-        user_session = UserSession.search({
-            'session_id': session_id
-        })
-
-        if not user_session:
-            return False
-
-        user_session = user_session[0]
-
-        try:
-            user_session.remove()
-            UserSession.save_to_file()
-        except Exception:
-            return False
-
-        return True
+        return session_dict.get('user_id')
