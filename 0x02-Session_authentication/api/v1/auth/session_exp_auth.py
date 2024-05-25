@@ -17,6 +17,8 @@ class SessionExpAuth(SessionAuth):
 
     def create_session(self, user_id=None):
         """Create a session with an expiration."""
+        if user_id is None:
+            return None
         session_id = super().create_session(user_id)
         if session_id is None:
             return None
@@ -29,10 +31,12 @@ class SessionExpAuth(SessionAuth):
         return session_id
 
     def user_id_for_session_id(self, session_id=None):
-        """Retrieve the user_id associated
-        with the session_id if not expired.
+        """Retrieve the user_id associated with
+        the session_id if not expired.
         """
-        if session_id is None or session_id not in self.user_id_by_session_id:
+        if session_id is None:
+            return None
+        if session_id not in self.user_id_by_session_id:
             return None
 
         session_dict = self.user_id_by_session_id.get(session_id)
