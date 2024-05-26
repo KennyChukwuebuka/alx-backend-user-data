@@ -13,14 +13,18 @@ class SessionDBAuth(SessionExpAuth):
     sessions with database persistence """
 
     def create_session(self, user_id=None):
-        """Returns a Session ID and creates a UserSession
-        record in DB if user_id is valid
-        """
-        if not user_id:
+        """ Creates a session ID and stores it in the database """
+        if user_id is None:
             return None
 
         session_id = str(uuid.uuid4())
-        new_session = UserSession(user_id=user_id, session_id=session_id)
+        session_duration = int(getenv('SESSION_DURATION', 0))
+        expiration_time = (datetime.utcnow() + timedelta(
+            seconds=session_duration)).isoformat()
+
+        new_session = UserSession(
+            user_id=user_id, session_id=session_id,
+            expiration_time=expiration_time)
         new_session.save()
         return session_id
 
