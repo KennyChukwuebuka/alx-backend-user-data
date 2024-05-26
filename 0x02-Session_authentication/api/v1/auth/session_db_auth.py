@@ -19,7 +19,7 @@ class SessionDBAuth(SessionExpAuth):
 
         session_id = str(uuid.uuid4())
         session_duration = int(getenv('SESSION_DURATION', 0))
-        expiration_time = (datetime.utcnow() + timedelta(
+        expiration_time = (datetime.now() + timedelta(
             seconds=session_duration)).isoformat()
 
         new_session = UserSession(
@@ -50,7 +50,7 @@ class SessionDBAuth(SessionExpAuth):
             return False
 
         expiration_time = datetime.fromisoformat(user_session.expiration_time)
-        return datetime.utcnow() > expiration_time
+        return datetime.now() > expiration_time
 
     def destroy_session(self, request=None):
         """ Destroys the user session based on session ID
