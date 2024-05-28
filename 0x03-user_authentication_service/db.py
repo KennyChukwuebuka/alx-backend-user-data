@@ -41,7 +41,11 @@ class DB:
         """Add a user to the database
         """
         user = User(email=email, hashed_password=hashed_password)
-        session = self._session
-        session.add(user)
-        session.commit()
+        try:
+            self._session.add(user)
+            self._session.commit()
+        except Exception as e:
+            print(f"Error adding user to database: {e}")
+            self._session.rollback()
+            raise
         return user
