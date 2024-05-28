@@ -40,6 +40,13 @@ class DB:
         """
         if not kwargs:
             raise InvalidRequestError
+        
+        column_name = User.__table__.c.keys()
+
+        for key in kwargs.keys():
+            if key not in column_name:
+                raise InvalidRequestError
+
         user = self._session.query(User).filter_by(**kwargs).first()
         if user is None:
             raise NoResultFound
@@ -51,7 +58,7 @@ class DB:
         user = self.find_user_by(id=user_id)
         column_name = User.__table__.c.keys()
 
-        for key in kwargs.items():
+        for key in kwargs.keys():
             if key not in column_name:
                 raise ValueError
 
