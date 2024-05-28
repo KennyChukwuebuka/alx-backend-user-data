@@ -36,38 +36,3 @@ class DB:
         self._session.commit()
 
         return user
-
-    def find_user_by(self, **kwargs) -> User:
-        """ Finds user by key word args
-        Return: First row found in the users table as filtered by kwargs
-        """
-        if not kwargs:
-            raise InvalidRequestError
-
-        column_names = User.__table__.columns.keys()
-        for key in kwargs.keys():
-            if key not in column_names:
-                raise InvalidRequestError
-
-        user = self._session.query(User).filter_by(**kwargs).first()
-
-        if user is None:
-            raise NoResultFound
-
-        return user
-
-    def update_user(self, user_id: int, **kwargs) -> None:
-        """ Update users attributes
-        Returns: None
-        """
-        user = self.find_user_by(id=user_id)
-
-        column_names = User.__table__.columns.keys()
-        for key in kwargs.keys():
-            if key not in column_names:
-                raise ValueError
-
-        for key, value in kwargs.items():
-            setattr(user, key, value)
-
-        self._session.commit()
