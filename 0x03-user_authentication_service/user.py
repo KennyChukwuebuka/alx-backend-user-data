@@ -91,4 +91,3 @@ class User(Base):
         """
         from werkzeug.security import check_password_hash
         return check_password_hash(self.hashed_password, pwd)
-        self.session_id = session_id
