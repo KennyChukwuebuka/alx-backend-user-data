@@ -40,7 +40,7 @@ class DB:
         """
         if not kwargs:
             raise InvalidRequestError
-        
+
         column_name = User.__table__.c.keys()
 
         for key in kwargs.keys():
