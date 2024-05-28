@@ -41,35 +41,7 @@ class DB:
         """add_user method
         """
         user = User(email=email, hashed_password=hashed_password)
-        self._session.add(user)
-        self._session.commit()
+        Session = self._session
+        Session.add(user)
+        Session.commit()
         return user
-
-    def get_user(self, email: str) -> User:
-        """get_user method
-        """
-        return self._session.query(User).filter(User.email == email).first()
-
-    def destroy_session(self, user_id: int) -> None:
-        """destroy_session method
-        """
-        user = self._session.query(User).filter(User.id == user_id).first()
-        if user:
-            user.session_id = None
-            self._session.commit()
-
-    def update_session(self, user_id: int, session_id: str) -> None:
-        """update_session method
-        """
-        user = self._session.query(User).filter(User.id == user_id).first()
-        if user:
-            user.session_id = session_id
-            self._session.commit()
-
-    def get_reset_password_token(self, email: str) -> str:
-        """get_reset_password_token method
-        """
-        user = self._session.query(User).filter(User.email == email).first()
-        if user:
-            return user.reset_token
-        return None
