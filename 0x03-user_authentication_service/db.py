@@ -8,11 +8,11 @@ Contains the class DB
     argument email and hashed_password
     return user object and save user to the database
 """
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-
 from user import Base, User
 
 
@@ -38,10 +38,10 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """add_user method
+        """Add a user to the database
         """
         user = User(email=email, hashed_password=hashed_password)
-        Session = self._session
-        Session.add(user)
-        Session.commit()
+        session = self._session
+        session.add(user)
+        session.commit()
         return user
