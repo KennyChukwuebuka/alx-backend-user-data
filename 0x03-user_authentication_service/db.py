@@ -4,7 +4,8 @@
 Contains the class DB
     implement the add_user method
     DB._session is a private property NEVER use fromoutside DB class
-    implement add_user method which has string argument email and hashed_password
+    implement add_user method which has string
+    argument email and hashed_password
     return user object and save user to the database
 """
 from sqlalchemy import create_engine
@@ -72,18 +73,3 @@ class DB:
         if user:
             return user.reset_token
         return None
-
-    def update_password(self, reset_token: str, password: str) -> None:
-        """update_password method
-        """
-        user = self._session.query(User).filter(User.reset_token == reset_token).first()
-        if user:
-            user.hashed_password = password
-            user.reset_token = None
-            self._session.commit()
-
-    def close(self) -> None:
-        """call remove() method on the private session attribute
-        """
-        if self.__session:
-            self.__session.close()
