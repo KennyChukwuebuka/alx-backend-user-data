@@ -6,6 +6,7 @@ import hashlib
 import bcrypt
 from db import DB
 from sqlalchemy.exc import NoResultFound
+from user import User
 
 
 def _hash_password(password: str) -> bytes:
@@ -25,12 +26,12 @@ class Auth:
         """
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> str:
+    def register_user(self, email: str, password: str) -> User:
         """Register a user
         """
         try:
-            self._db.find_user_by(email=email)
+            user = self._db.find_user_by(email=email)
             raise ValueError("User {} already exists".format(email))
         except NoResultFound:
-            User = self._db.add_user(email, _hash_password(password))
-            return User
+            user = self._db.add_user(email, _hash_password(password))
+            return user
