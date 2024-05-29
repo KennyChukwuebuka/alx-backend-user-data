@@ -10,4 +10,4 @@ def _hash_password(password: str) -> bytes:
     Note: the returned bytes should be a salted hash of the input password
     hashed with bycrypt.hashpw
     """
-    return hashlib.sha256(password.encode()).hexdigest().lower()
+    return hashlib.sha256(password.encode()).hexdigest().encode()
