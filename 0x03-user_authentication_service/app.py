@@ -3,20 +3,20 @@
 """
 from flask import Flask, jsonify
 from flask import request
-from auth import Auth
+
 
 app = Flask(__name__)
-auth = Auth()
 
 
 @app.route('/', methods=['GET'], strict_slashes=True)
-def root_path():
+def home():
     """ Root path
     """
-    reponse_message = {
-        "message": "Bienvenue"
+    reponse_payload = {
+        "message": "Bienvenue",
+        "status": "OK"
     }
-    return jsonify(reponse_message)
+    return jsonify(reponse_payload)
 
 
 if __name__ == "__main__":
