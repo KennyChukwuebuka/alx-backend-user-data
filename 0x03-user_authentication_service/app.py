@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ App module
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 from flask import request
 from auth import Auth
 
@@ -22,23 +22,22 @@ def home():
 
 
 @app.route('/users', methods=['POST'], strict_slashes=False)
-def create_user():
+def create_user() -> str:
     """ Create a new user
     """
-    email = request.form.get('email')
-    password = request.form.get('password')
+    try:
+        email = request.form['email']
+        password = request.form['password']
+    except KeyError:
+        abort(400)
+
     try:
         user = AUTH.register_user(email, password)
-        reponse_payload = {
-            "email": email,
-            "message": "user created"
-        }
-        return jsonify(reponse_payload)
-    except Exception:
-        reponse_payload = {
-            "message": "email already registered"
-        }
-        return jsonify(reponse_payload), 400
+    except ValueError:
+        return jsonify({"message": "email already registered"}), 400
+
+    message = {"email": email, "message": "user created"}
+    return jsonify(message)
 
 
 if __name__ == "__main__":
