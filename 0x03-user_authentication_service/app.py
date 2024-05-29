@@ -14,7 +14,7 @@ def home():
     """
     reponse_payload = {
         "message": "Bienvenue",
-        "status": "OK"
+        "status": "success"
     }
     return jsonify(reponse_payload)
 
