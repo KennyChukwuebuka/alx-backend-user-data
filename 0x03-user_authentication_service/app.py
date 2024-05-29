@@ -8,13 +8,12 @@ from flask import request
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET'], strict_slashes=False)
 def home():
     """ Root path
     """
     reponse_payload = {
-        "message": "Bienvenue",
-        "status": "success"
+        "message": "Bienvenue"
     }
     return jsonify(reponse_payload)
 
