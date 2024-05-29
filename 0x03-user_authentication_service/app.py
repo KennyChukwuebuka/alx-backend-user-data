@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """ App module
 """
-from flask import Flask, jsonify, abort
-from flask import request
+from flask import Flask, jsonify, abort, request
 from auth import Auth
 
 
-AUTH = Auth()
-
 app = Flask(__name__)
+AUTH = Auth()
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
@@ -21,10 +19,9 @@ def home():
     return jsonify(reponse_payload)
 
 
-@app.route('/users', methods=['POST'], strict_slashes=False)
-def create_user() -> str:
-    """ Create a new user
-    """
+@app.route('/users', methods=['POST'])
+def register_user() -> str:
+    """Registers a new user if it does not exist before"""
     try:
         email = request.form['email']
         password = request.form['password']
@@ -36,8 +33,8 @@ def create_user() -> str:
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
-    message = {"email": email, "message": "user created"}
-    return jsonify(message)
+    msg = {"email": email, "message": "user created"}
+    return jsonify(msg)
 
 
 if __name__ == "__main__":
