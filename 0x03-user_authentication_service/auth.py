@@ -7,10 +7,7 @@ import hashlib
 
 def _hash_password(password: str) -> bytes:
     """ Hash password
+    Note: the returned bytes should be a salted hash of the input password
+    hashed with bycrypt.hashpw
     """
-    return hashlib.pbkdf2_hmac(
-        'sha256',
-        password.encode('utf-8'),
-        b'',
-        100000
-    )
+    return hashlib.sha256(password.encode()).hexdigest().lower()
