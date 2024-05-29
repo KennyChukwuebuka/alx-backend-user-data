@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" Authentication Module """
+"""Authentication module 
+"""
 
 import bcrypt
 from db import DB
@@ -10,13 +11,16 @@ from uuid import uuid4
 
 
 def _hash_password(password: str) -> str:
-    """ Returns a salted hash of the input password """
+    """Returns a salted, hashed password
+    """
     hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
     return hashed
 
 
 def _generate_uuid() -> str:
-    """Returns a string representation of a new UUID"""
+    """
+    Generates a UUID
+    """
     UUID = uuid4()
     return str(UUID)
 
@@ -29,8 +33,7 @@ class Auth:
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
-        """ Registers a user in the database
-        Returns: User Object
+        """Register a new user in the database
         """
 
         try:
@@ -45,7 +48,8 @@ class Auth:
             raise ValueError(f'User {email} already exists')
 
     def valid_login(self, email: str, password: str) -> bool:
-        """If password is valid returns true, else, false"""
+        """Validates login credentials
+        """
         try:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
@@ -60,7 +64,8 @@ class Auth:
         return False
 
     def create_session(self, email: str) -> str:
-        """ Returns session ID for a user """
+        """Creates a new session for a user
+        """
         try:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
