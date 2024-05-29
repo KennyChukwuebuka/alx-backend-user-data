@@ -3,6 +3,7 @@
 """
 
 import hashlib
+import bcrypt
 
 
 def _hash_password(password: str) -> bytes:
@@ -10,4 +11,4 @@ def _hash_password(password: str) -> bytes:
     Note: the returned bytes should be a salted hash of the input password
     hashed with bycrypt.hashpw
     """
-    return hashlib.sha256(password.encode()).hexdigest().encode()
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
