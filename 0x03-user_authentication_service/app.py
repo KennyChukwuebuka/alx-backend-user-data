@@ -8,7 +8,7 @@ from flask import request
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'], strict_slashes=True)
+@app.route('/', methods=['GET'])
 def home():
     """ Root path
     """
