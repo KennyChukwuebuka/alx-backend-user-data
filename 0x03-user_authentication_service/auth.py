@@ -82,7 +82,7 @@ class Auth:
             email (str): The email address of the user.
 
         Returns:
-            str: The session ID for the user, or None if the user is not found.
+            str: The session ID for the user
         """
         try:
             user = self._db.find_user_by(email=email)
